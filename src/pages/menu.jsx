@@ -22,8 +22,8 @@ const StyledVotingImg = styled.img`
 
 const Menu = () => {
   return (
-    <Stack flex={1} alignItems="center" p={3}>
-      <Stack gap={6}>
+    <Stack flex={1} alignItems="center" p={3} position="relative">
+      <Stack gap={6} position="fixed">
         <Logo />
         <Stack mt={1.5}>
           <Typography variant="h1">Hi intern!</Typography>
@@ -66,7 +66,13 @@ const Menu = () => {
               >
                 <StyledImg src={breeds} />
               </Stack>
-              <CustomButton variant="contained">BREEDS</CustomButton>
+              <CustomButton
+                component={NavLink}
+                to="/breeds"
+                variant="contained"
+              >
+                BREEDS
+              </CustomButton>
             </Stack>
             <Stack gap={1}>
               <Stack
@@ -78,7 +84,13 @@ const Menu = () => {
               >
                 <StyledImg src={gallery} />
               </Stack>
-              <CustomButton variant="contained">GALLERY</CustomButton>
+              <CustomButton
+                component={NavLink}
+                to="/gallery"
+                variant="contained"
+              >
+                GALLERY
+              </CustomButton>
             </Stack>
           </Stack>
         </Stack>

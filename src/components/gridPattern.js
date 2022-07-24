@@ -1,10 +1,13 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
-const Grid = styled.div`
+
+const GridPattern = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: 100px;
-  gap: 12px;
+  grid-auto-rows: 140px;
+
+  gap: 20px;
+  justify-items: center;
 
   *:nth-child(10n-9) {
     grid-row-end: span 2;
@@ -22,4 +25,4 @@ const Grid = styled.div`
   }
 `;
 
-export default Grid;
+export default GridPattern;

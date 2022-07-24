@@ -12,10 +12,9 @@ const StyledImg = styled.img`
 
 const Homepage = () => {
   return (
-    <Stack flex={1} height={1} position="relative">
-      <Box bgcolor={"primary.dark"} height={"100%"} borderRadius={"20px"} m={3}>
-        <StyledImg src={girl} />
-      </Box>
+    <Stack flex={1} height="100vh" position="relative">
+      <Box bgcolor="primary.dark" height={1} borderRadius={"20px"} m={4} />
+      <StyledImg src={girl} />
     </Stack>
   );
 };

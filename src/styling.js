@@ -40,6 +40,15 @@ export const themeLight = createTheme({
       fontSize: 20,
       fontWeight: 500,
     },
+    h4: {
+      fontSize: 16,
+      fontWeight: 400,
+    },
+    h5: {
+      fontSize: 10,
+      fontWeight: 500,
+      color: "#8C8C8C",
+    },
   },
   components: {
     MuiOutlinedInput: {
@@ -75,15 +84,15 @@ export const themeLight = createTheme({
 export const inputGlobalStyles = (
   <GlobalStyles
     styles={{
+      html: {
+        fontSize: "62.5%",
+        lineHeight: 1,
+      },
       body: {
         margin: 0,
         padding: 0,
         backgroundColor: "#E5E5E5",
         boxSizing: "border-box",
-      },
-      html: {
-        fontSize: "62.5%",
-        lineHeight: 1,
       },
     }}
   />

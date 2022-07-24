@@ -1,47 +1,56 @@
-import { IconButton, InputAdornment, Stack, TextField } from "@mui/material";
-
-import React from "react";
-import { Outlet } from "react-router-dom";
+import { IconButton, InputAdornment, TextField } from "@mui/material";
 import { ReactComponent as Search } from "../assets/search.svg";
 
 const Searchbar = () => {
   return (
-    <Stack flex={1} p={3}>
-      <TextField
-        id="input-with-icon-textfield"
-        label="Search for breeds by name"
-        sx={{
-          borderRadius: "20px",
-          bgcolor: "primary.main",
+    <TextField
+      fullWidth
+      id="input-with-icon-textfield"
+      label="Search for breeds by name"
+      InputLabelProps={{ shrink: false }}
+      sx={{
+        height: "60px",
+        justifyContent: "center",
+        borderRadius: "20px",
+        fontSize: "2rem",
+        bgcolor: "primary.main",
+        color: "text.disabled",
+        transition: "outline-color 0.3s",
+        outline: "#fff solid 2px",
+        "& label": {
+          fontSize: "2rem",
           color: "text.disabled",
-          "& label, & label.Mui-focused": { color: "text.disabled" },
+        },
 
-          "&.Mui-focused, &:active ": {
-            bgcolor: "primary.main",
-          },
-          "&.MuiOutlinedInput-notchedOutline": {},
-        }}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                edge="end"
-                sx={{
-                  bgcolor: "primary.dark",
-                  padding: "10px",
-                  borderRadius: "10px",
-                  marginRight: "1px",
-                }}
-              >
-                <Search />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
-
-      <Outlet />
-    </Stack>
+        "&:hover, &:focus ": {
+          outlineStyle: " solid ",
+          outlineWidth: 2,
+          outlineColor: "#FBE0DC",
+        },
+        "&:active ": {
+          outlineStyle: " solid ",
+          outlineWidth: 2,
+          outlineColor: "#FF868E",
+        },
+      }}
+      InputProps={{
+        endAdornment: (
+          <InputAdornment position="end">
+            <IconButton
+              edge="end"
+              sx={{
+                bgcolor: "primary.dark",
+                padding: "10px",
+                borderRadius: "10px",
+                marginRight: "1px",
+              }}
+            >
+              <Search />
+            </IconButton>
+          </InputAdornment>
+        ),
+      }}
+    />
   );
 };
 

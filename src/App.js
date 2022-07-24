@@ -1,7 +1,8 @@
 import { Stack, ThemeProvider } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
 
-import Searchbar from "./components/searchbar";
+import Layout from "./components/layout";
+import Breed from "./pages/breed";
 import Breeds from "./pages/breeds";
 import Dislikes from "./pages/dislikes";
 import Favorites from "./pages/favorites";
@@ -11,6 +12,7 @@ import Likes from "./pages/likes";
 import Menu from "./pages/menu";
 import Search from "./pages/search";
 import Voting from "./pages/voting";
+
 import { inputGlobalStyles, themeLight } from "./styling";
 
 const App = () => {
@@ -18,13 +20,14 @@ const App = () => {
     <>
       {inputGlobalStyles}
       <ThemeProvider theme={themeLight}>
-        <Stack direction={"row"} height={"100vh"}>
+        <Stack direction={"row"} height={1}>
           <Menu />
           <Routes>
             <Route path="/" element={<Homepage />} />
-            <Route element={<Searchbar />}>
+            <Route element={<Layout />}>
               <Route path="voting" element={<Voting />} />
               <Route path="breeds" element={<Breeds />} />
+              <Route path="breeds/:breedId" element={<Breed />} />
               <Route path="gallery" element={<Gallery />} />
               <Route path="search" element={<Search />} />
               <Route path="favorites" element={<Favorites />} />
@@ -38,3 +41,7 @@ const App = () => {
   );
 };
 export default App;
+
+//nth-of-type
+//voting img
+// breeds text styling
