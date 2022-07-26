@@ -19,6 +19,7 @@ import {
 } from "../requests";
 import { useDispatch, useSelector } from "react-redux";
 import { addLogToVotes, selectVotesLog } from "../logsSlice";
+import Spinner from "../components/spinner";
 
 const StyledImg = styled.img`
   display: block;
@@ -27,12 +28,15 @@ const StyledImg = styled.img`
 
 const Voting = () => {
   const [currentImg, setCurrentImg] = useState();
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const votesLog = useSelector(selectVotesLog);
 
   const fetchNewImg = async () => {
+    setLoading(true);
     const img = await getRandomImage();
     setCurrentImg(img[0]);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -89,100 +93,106 @@ const Voting = () => {
     >
       <PageTitle page="VOTING" />
       <Stack spacing={7}>
-        <Stack position="relative" height="40rem" width={1}>
-          <Stack
-            overflow="hidden"
-            justifyContent={"center"}
-            borderRadius="20px"
-          >
-            <StyledImg src={currentImg ? currentImg.url : ""} />
+        {loading ? (
+          <Stack height={1} justifyContent="center" alignItems="center">
+            <Spinner wh={30} />
           </Stack>
-          <ButtonGroup
-            variant="contained"
-            disableElevation
-            sx={{
-              bgcolor: "primary.main",
-              borderRadius: "20px",
-              outline: "#fff solid 4px",
-              position: "absolute",
-              bottom: 0,
-              left: "50%",
-              transform: "translate(-50%, 50%)",
-            }}
-          >
-            <IconButton
-              onClick={handleVoteUp}
+        ) : (
+          <Stack position="relative" height="40rem" width={1}>
+            <Stack
+              overflow="hidden"
+              justifyContent={"center"}
+              borderRadius="20px"
+            >
+              <StyledImg src={currentImg ? currentImg.url : ""} />
+            </Stack>
+            <ButtonGroup
+              variant="contained"
+              disableElevation
               sx={{
-                bgcolor: "#97EAB9",
-                color: "primary.main",
-                height: "80px",
-                width: "80px",
-                borderRadius: "20px 0 0 20px",
-
-                "&:hover": {
-                  bgcolor: "#97EAB94D",
-                  color: "#97EAB9",
-                },
+                bgcolor: "primary.main",
+                borderRadius: "20px",
+                outline: "#fff solid 4px",
+                position: "absolute",
+                bottom: 0,
+                left: "50%",
+                transform: "translate(-50%, 50%)",
               }}
             >
-              <SvgIcon
-                component={Smile}
+              <IconButton
+                onClick={handleVoteUp}
                 sx={{
-                  fontSize: "30px",
-                }}
-                inheritViewBox
-              />
-            </IconButton>
-            <IconButton
-              onClick={handleAddToFavorites}
-              sx={{
-                bgcolor: "secondary.main",
-                color: "primary.main",
-                height: "80px",
-                width: "80px",
-                borderRadius: 0,
-                marginX: "4px",
+                  bgcolor: "#97EAB9",
+                  color: "primary.main",
+                  height: "80px",
+                  width: "80px",
+                  borderRadius: "20px 0 0 20px",
 
-                "&:hover": {
-                  bgcolor: "primary.dark",
-                  color: "secondary.main",
-                },
-              }}
-            >
-              <SvgIcon
+                  "&:hover": {
+                    bgcolor: "#97EAB94D",
+                    color: "#97EAB9",
+                  },
+                }}
+              >
+                <SvgIcon
+                  component={Smile}
+                  sx={{
+                    fontSize: "30px",
+                  }}
+                  inheritViewBox
+                />
+              </IconButton>
+              <IconButton
+                onClick={handleAddToFavorites}
                 sx={{
-                  fontSize: "30px",
+                  bgcolor: "secondary.main",
+                  color: "primary.main",
+                  height: "80px",
+                  width: "80px",
+                  borderRadius: 0,
+                  marginX: "4px",
+
+                  "&:hover": {
+                    bgcolor: "primary.dark",
+                    color: "secondary.main",
+                  },
                 }}
-                component={Like}
-                inheritViewBox
-              />
-            </IconButton>
-            <IconButton
-              onClick={handleVoteDown}
-              sx={{
-                bgcolor: "#FFD280",
-                color: "primary.main",
-
-                height: "80px",
-                width: "80px",
-                borderRadius: "0 20px 20px 0",
-
-                "&:hover": {
-                  bgcolor: "#FFD2804D",
-                  color: "#FFD280",
-                },
-              }}
-            >
-              <SvgIcon
+              >
+                <SvgIcon
+                  sx={{
+                    fontSize: "30px",
+                  }}
+                  component={Like}
+                  inheritViewBox
+                />
+              </IconButton>
+              <IconButton
+                onClick={handleVoteDown}
                 sx={{
-                  fontSize: "30px",
+                  bgcolor: "#FFD280",
+                  color: "primary.main",
+
+                  height: "80px",
+                  width: "80px",
+                  borderRadius: "0 20px 20px 0",
+
+                  "&:hover": {
+                    bgcolor: "#FFD2804D",
+                    color: "#FFD280",
+                  },
                 }}
-                component={Sad}
-                inheritViewBox
-              />
-            </IconButton>
-          </ButtonGroup>
-        </Stack>
+              >
+                <SvgIcon
+                  sx={{
+                    fontSize: "30px",
+                  }}
+                  component={Sad}
+                  inheritViewBox
+                />
+              </IconButton>
+            </ButtonGroup>
+          </Stack>
+        )}
         <Stack spacing={1}>
           {votesLog.length !== 0 &&
             votesLog.map((log) => {

@@ -30,6 +30,8 @@ import {
   postAddToFavorites,
   postUploadImg,
 } from "../requests";
+import SmallSpinner from "../components/small-spinner";
+import Spinner from "../components/spinner";
 
 const StyledImg = styled.img`
   display: block;
@@ -62,7 +64,7 @@ const StyledInput = styled.input`
 const Gallery = () => {
   // to move
   const [inputImg, setInputImg] = useState();
-  const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [text, setText] = useState();
   const [error, setError] = useState(false);
 
@@ -79,7 +81,7 @@ const Gallery = () => {
   };
 
   const handleUpload = async () => {
-    setLoading(true);
+    setUploading(true);
     const res = await postUploadImg(inputImg);
     if (res.status === 201) {
       setText(
@@ -94,11 +96,13 @@ const Gallery = () => {
         >
           <SvgIcon component={Yes} inheritViewBox />
 
-          <Typography>Thanks for the Upload - Cat found!</Typography>
+          <Typography variant="h4" color="#8C8C8C">
+            Thanks for the Upload - Cat found!
+          </Typography>
         </Stack>
       );
       setInputImg(null);
-      setLoading(false);
+      setUploading(false);
     } else {
       setText(
         <Stack
@@ -112,10 +116,12 @@ const Gallery = () => {
         >
           <SvgIcon component={No} inheritViewBox />
 
-          <Typography>No Cat found - try a different one</Typography>
+          <Typography variant="h4" color="#8C8C8C">
+            No Cat found - try a different one
+          </Typography>
         </Stack>
       );
-      setLoading(false);
+      setUploading(false);
       setError(true);
     }
   };
@@ -124,8 +130,9 @@ const Gallery = () => {
   const [breed, setBreed] = useState("none");
   const [type, setType] = useState("jpg,png");
   const [limit, setLimit] = useState(5);
-  const [items, setItems] = useState();
+  const [items, setItems] = useState([]);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const allBreedsRef = useRef();
 
@@ -137,6 +144,7 @@ const Gallery = () => {
   const fetchImages = async (breedId, limit, order, type) => {
     const data = await getImages(breedId, limit, order, type);
     setItems(data);
+    setLoading(false);
   };
 
   const handleAddRemoveToFavorites = async (e) => {
@@ -160,6 +168,7 @@ const Gallery = () => {
   };
 
   const handleReload = () => {
+    setLoading(true);
     fetchImages(breed, limit, order, type);
   };
 
@@ -172,6 +181,7 @@ const Gallery = () => {
   }, []);
 
   useEffect(() => {
+    setLoading(true);
     fetchImages(breed, limit, order, type);
   }, [limit, order, breed, type]);
 
@@ -205,7 +215,7 @@ const Gallery = () => {
             top="24px"
             padding={3}
             alignItems="center"
-            spacing={2}
+            spacing={3}
           >
             <IconButton
               onClick={handleClose}
@@ -223,7 +233,7 @@ const Gallery = () => {
             <Typography variant="h1">
               Upload a .jpg or .png Cat Image
             </Typography>
-            <Typography>
+            <Typography variant="h2">
               Any uploads must comply with the{" "}
               <Link
                 color="#FF868E"
@@ -251,7 +261,14 @@ const Gallery = () => {
               }}
             >
               {!inputImg && (
-                <Typography>
+                <Typography
+                  variant="h2"
+                  sx={{
+                    "& b": {
+                      color: "#1D1D1D",
+                    },
+                  }}
+                >
                   {" "}
                   <b>Drag here</b> your file or <b>Click here</b> to upload
                 </Typography>
@@ -266,16 +283,18 @@ const Gallery = () => {
                 <StyledUploadedImg src={URL.createObjectURL(inputImg)} />
               )}
             </Stack>
-            <Typography>
+            <Typography variant="h2">
               {inputImg
                 ? `Image File Name: ${inputImg.name}`
                 : "No file selected"}
             </Typography>
             {inputImg && (
               <CustomButton
-                disabled={loading}
+                startIcon={uploading && <SmallSpinner />}
+                disabled={uploading}
                 sx={{
                   bgcolor: "#FF868E",
+                  paddingX: "30px",
                   "&:hover": {
                     bgcolor: "#FF868E",
                   },
@@ -405,9 +424,13 @@ const Gallery = () => {
           </FormControl>
         </Stack>
       </Box>
-      <GridPattern>
-        {items &&
-          items.map((item, i) => {
+      {loading ? (
+        <Stack height={1} justifyContent="center" alignItems="center">
+          <Spinner wh={30} />
+        </Stack>
+      ) : items.length !== 0 ? (
+        <GridPattern>
+          {items.map((item) => {
             return (
               <Box
                 key={item.id}
@@ -453,7 +476,18 @@ const Gallery = () => {
               </Box>
             );
           })}
-      </GridPattern>
+        </GridPattern>
+      ) : (
+        <Typography
+          variant="h4"
+          color="#8C8C8C"
+          bgcolor="#e5e5e5"
+          padding="20px"
+          borderRadius="10px"
+        >
+          No item found
+        </Typography>
+      )}
     </Stack>
   );
 };

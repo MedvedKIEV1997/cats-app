@@ -29,7 +29,7 @@ const App = () => {
               <Route path="breeds" element={<Breeds />} />
               <Route path="breeds/:breedId" element={<Breed />} />
               <Route path="gallery" element={<Gallery />} />
-              <Route path="search" element={<Search />} />
+              <Route path="search/*" element={<Search />} />
               <Route path="favorites" element={<Favorites />} />
               <Route path="likes" element={<Likes />} />
               <Route path="dislikes" element={<Dislikes />} />

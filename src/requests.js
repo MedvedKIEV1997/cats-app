@@ -13,6 +13,20 @@ export const getRandomImage = async () => {
   }
 };
 
+export const getVotes = async () => {
+  try {
+    const res = await axios.get(`${END_POINT}/votes?sub_id=${SUB_ID}`, {
+      headers: {
+        "x-api-key": process.env.REACT_APP_API_KEY,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    alert("Something went wrong, reload the page or try again later");
+  }
+};
+
 export const postVoteDown = async (id) => {
   try {
     const res = await axios.post(

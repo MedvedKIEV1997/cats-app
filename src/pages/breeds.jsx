@@ -5,6 +5,7 @@ import {
   MenuItem,
   Select,
   Stack,
+  Typography,
 } from "@mui/material";
 import GridPattern from "../components/gridPattern";
 import PageTitle from "../components/pageTitle";
@@ -18,6 +19,7 @@ import CustomButton from "../components/customButton";
 import { useEffect, useRef, useState } from "react";
 import { getAllBreeds, getAllBreedsWithLimitPageAndOrder } from "../requests";
 import { Link } from "react-router-dom";
+import Spinner from "../components/spinner";
 
 const StyledImg = styled.img`
   display: block;
@@ -31,9 +33,10 @@ const Breeds = () => {
   const [page, setPage] = useState(0);
   const [lastPage, setLastPage] = useState(0);
   const [breed, setBreed] = useState("All breeds");
-  const [items, setItems] = useState();
+  const [items, setItems] = useState([]);
   const [count, setCount] = useState();
   const [order, setOrder] = useState("ASC");
+  const [loading, setLoading] = useState(false);
   const allBreedsRef = useRef(null);
 
   const handleLimit = (e) => {
@@ -73,6 +76,7 @@ const Breeds = () => {
     setItems(data);
     setCount(newCount);
     setLastPage(Math.ceil(count / limit) - 1);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -80,6 +84,7 @@ const Breeds = () => {
   }, []);
 
   useEffect(() => {
+    setLoading(true);
     if (breed === "All breeds") {
       fetchAllBreedsWithLimitPageAndOrder(limit, page, order);
     } else {
@@ -88,6 +93,7 @@ const Breeds = () => {
       );
       setPage(0);
       setLastPage(0);
+      setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [limit, page, order, breed]);
@@ -170,72 +176,90 @@ const Breeds = () => {
         </IconButton>
       </Stack>
 
-      <GridPattern>
-        {items &&
-          items.map((item) => (
-            <Box
-              key={item.id}
-              borderRadius="20px"
-              overflow="hidden"
-              width={1}
-              height={1}
-              position="relative"
-            >
-              <StyledImg src={item.image?.url} />
-              <Stack
-                position="absolute"
-                height={1}
-                alignItems="center"
-                justifyContent="end"
+      {loading ? (
+        <Stack height={1} justifyContent="center" alignItems="center">
+          <Spinner wh={30} />
+        </Stack>
+      ) : items.length !== 0 ? (
+        <>
+          <GridPattern>
+            {items.map((item) => (
+              <Box
+                key={item.id}
+                borderRadius="20px"
+                overflow="hidden"
                 width={1}
-                sx={{
-                  zIndex: 5,
-                  top: 0,
-                  left: 0,
-
-                  "&:hover": {
-                    bgcolor: "#FF868E99",
-                  },
-                  "&:hover a": {
-                    display: "inline-flex",
-                  },
-                }}
+                height={1}
+                position="relative"
               >
-                <CustomButton
-                  component={Link}
-                  to={item.id}
-                  variant="contained"
-                  size="large"
+                <StyledImg src={item.image?.url} />
+                <Stack
+                  position="absolute"
+                  height={1}
+                  alignItems="center"
+                  justifyContent="end"
+                  width={1}
                   sx={{
-                    display: "none",
-                    margin: "30px",
-                    width: "80%",
+                    zIndex: 5,
+                    top: 0,
+                    left: 0,
+
+                    "&:hover": {
+                      bgcolor: "#FF868E99",
+                    },
+                    "&:hover a": {
+                      display: "inline-flex",
+                    },
                   }}
                 >
-                  {item.name}
-                </CustomButton>
-              </Stack>
-            </Box>
-          ))}
-      </GridPattern>
-      <Stack direction="row" justifyContent="space-evenly">
-        <CustomButton
-          disabled={page === 0}
-          variant="contained"
-          startIcon={<Prev />}
-          onClick={handlePrevPage}
+                  <CustomButton
+                    component={Link}
+                    to={item.id}
+                    variant="contained"
+                    size="large"
+                    sx={{
+                      display: "none",
+                      margin: "10px",
+                      width: "80%",
+                      textAlign: "center",
+                    }}
+                  >
+                    {item.name}
+                  </CustomButton>
+                </Stack>
+              </Box>
+            ))}
+          </GridPattern>
+          <Stack direction="row" justifyContent="space-evenly">
+            <CustomButton
+              disabled={page === 0}
+              variant="contained"
+              startIcon={<Prev />}
+              onClick={handlePrevPage}
+            >
+              Prev
+            </CustomButton>
+            <CustomButton
+              disabled={page === lastPage}
+              variant="contained"
+              startIcon={<Next />}
+              onClick={handleNextPage}
+            >
+              Next
+            </CustomButton>
+          </Stack>
+        </>
+      ) : (
+        <Typography
+          variant="h4"
+          color="#8C8C8C"
+          bgcolor="#e5e5e5"
+          padding="20px"
+          borderRadius="10px"
         >
-          Prev
-        </CustomButton>
-        <CustomButton
-          disabled={page === lastPage}
-          variant="contained"
-          startIcon={<Next />}
-          onClick={handleNextPage}
-        >
-          Next
-        </CustomButton>
-      </Stack>
+          No item found
+        </Typography>
+      )}
     </Stack>
   );
 };

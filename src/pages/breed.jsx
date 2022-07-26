@@ -64,6 +64,7 @@ const Breed = () => {
           </Typography>
         </Stack>
       </Stack>
+      {}
       <Stack position="relative" height="40rem" width={1}>
         <Stack
           overflow="hidden"

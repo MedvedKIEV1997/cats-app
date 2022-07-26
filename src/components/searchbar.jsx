@@ -1,13 +1,21 @@
 import { IconButton, InputAdornment, TextField } from "@mui/material";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import { ReactComponent as Search } from "../assets/search.svg";
 
 const Searchbar = () => {
+  const [search, setSearch] = useState("");
+
+  const handleChangeSearch = (e) => {
+    setSearch(e.target.value);
+  };
+
   return (
     <TextField
       fullWidth
-      id="input-with-icon-textfield"
+      value={search}
+      onChange={handleChangeSearch}
       label="Search for breeds by name"
-      InputLabelProps={{ shrink: false }}
       sx={{
         height: "60px",
         justifyContent: "center",
@@ -20,6 +28,12 @@ const Searchbar = () => {
         "& label": {
           fontSize: "2rem",
           color: "text.disabled",
+        },
+        "& label.Mui-focused": {
+          display: "none",
+        },
+        "& label.MuiInputLabel-shrink": {
+          display: "none",
         },
 
         "&:hover, &:focus ": {
@@ -37,6 +51,8 @@ const Searchbar = () => {
         endAdornment: (
           <InputAdornment position="end">
             <IconButton
+              component={Link}
+              to={`/search?name=${search}`}
               edge="end"
               sx={{
                 bgcolor: "primary.dark",
